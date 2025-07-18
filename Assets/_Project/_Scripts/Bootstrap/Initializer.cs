@@ -1,3 +1,5 @@
+using _Project._Scripts.Core.TargetHitting;
+using _Project._Scripts.Core.UI;
 using TMPro;
 using UnityEngine;
 
@@ -11,13 +13,24 @@ namespace _Project._Scripts.Bootstrap
         [SerializeField] private GameObject _camera;
         [SerializeField] private Vector3 _cameraPosition = new Vector3(0, 10f, 0f);
         [SerializeField] private Vector3 _cameraRotation = new Vector3(75f, 0f, 0f);
-
+        [Space]
+        [SerializeField] private int _scoreStep = 1;
+        [Header("UI")]
+        [SerializeField] private ScoreLabel _scoreLabel;
+        
+        private GameObject _target;
         
         private void Awake()
         {
             SpawnPlayer();
             SpawnTarget();
             SetCamera();
+            InitializeUI();
+        }
+
+        private void InitializeUI()
+        {
+            _scoreLabel.Initialize(_target.GetComponent<IDetectPlayer>(), _scoreStep);
         }
 
         private void SpawnPlayer()
@@ -41,6 +54,8 @@ namespace _Project._Scripts.Bootstrap
                 return;
             }
             var target = Instantiate(_targetPrefab, _targetPosition, Quaternion.identity);
+
+            _target = target;
         }
 
         private void SetCamera()
